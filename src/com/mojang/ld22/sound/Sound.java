@@ -5,7 +5,7 @@ import java.applet.AudioClip;
 
 public class Sound {
 	public static final Sound playerHurt = new Sound("/playerhurt.wav");
-	public static final Sound playerFly = new Sound("/fly2.wav");
+	public static final Sound playerFly = new Sound("/fly.wav");
 	public static final Sound playerDeath = new Sound("/death.wav");
 	public static final Sound monsterHurt = new Sound("/monsterhurt.wav");
 	public static final Sound test = new Sound("/test.wav");
