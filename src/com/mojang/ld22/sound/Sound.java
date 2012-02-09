@@ -5,6 +5,7 @@ import java.applet.AudioClip;
 
 public class Sound {
 	public static final Sound playerHurt = new Sound("/playerhurt.wav");
+	public static final Sound playerFly = new Sound("/fly2.wav");
 	public static final Sound playerDeath = new Sound("/death.wav");
 	public static final Sound monsterHurt = new Sound("/monsterhurt.wav");
 	public static final Sound test = new Sound("/test.wav");
@@ -27,6 +28,30 @@ public class Sound {
 			new Thread() {
 				public void run() {
 					clip.play();
+				}
+			}.start();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loop() {
+		try {
+			new Thread() {
+				public void run() {
+					clip.loop();
+				}
+			}.start();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void stop() {
+		try {
+			new Thread() {
+				public void run() {
+					clip.stop();
 				}
 			}.start();
 		} catch (Throwable e) {

@@ -13,6 +13,7 @@ public class Entity {
 	public int x, y;
 	public int xr = 6;
 	public int yr = 6;
+	public boolean flying = false;
 	public boolean removed;
 	public Level level;
 
@@ -49,6 +50,7 @@ public class Entity {
 			boolean stopped = true;
 			if (xa != 0 && move2(xa, 0)) stopped = false;
 			if (ya != 0 && move2(0, ya)) stopped = false;
+			
 			if (!stopped) {
 				int xt = x >> 4;
 				int yt = y >> 4;
@@ -61,7 +63,11 @@ public class Entity {
 
 	protected boolean move2(int xa, int ya) {
 		if (xa != 0 && ya != 0) throw new IllegalArgumentException("Move2 can only move along one axis at a time!");
-
+		if(flying){
+			x += xa*2;
+			y += ya*2;
+			return false;
+		}
 		int xto0 = ((x) - xr) >> 4;
 		int yto0 = ((y) - yr) >> 4;
 		int xto1 = ((x) + xr) >> 4;

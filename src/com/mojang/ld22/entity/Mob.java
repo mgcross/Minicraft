@@ -70,6 +70,7 @@ public class Mob extends Entity {
 	}
 
 	protected boolean isSwimming() {
+		if(flying)return false;
 		Tile tile = level.getTile(x >> 4, y >> 4);
 		return tile == Tile.water || tile == Tile.lava;
 	}

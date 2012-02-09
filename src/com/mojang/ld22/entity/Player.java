@@ -34,6 +34,7 @@ public class Player extends Mob {
 	public int maxStamina = 10;
 	private int onStairDelay;
 	public int invulnerableTime = 0;
+	//public boolean flying = false;
 
 	public Player(Game game, InputHandler input) {
 		this.game = game;
@@ -51,7 +52,8 @@ public class Player extends Mob {
 
 		if (invulnerableTime > 0) invulnerableTime--;
 		Tile onTile = level.getTile(x >> 4, y >> 4);
-		if (onTile == Tile.stairsDown || onTile == Tile.stairsUp) {
+		if (onTile == Tile.stairsDown && !flying || onTile == Tile.stairsUp && !flying) {
+			
 			if (onStairDelay == 0) {
 				changeLevel((onTile == Tile.stairsUp) ? 1 : -1);
 				onStairDelay = 10;
@@ -87,6 +89,15 @@ public class Player extends Mob {
 		if (input.down.down) ya++;
 		if (input.left.down) xa--;
 		if (input.right.down) xa++;
+		if(input.fly.clicked) {
+			if(flying){
+				flying = !flying;
+				Sound.playerFly.stop();
+			} else {
+				flying = !flying;
+				Sound.playerFly.loop();
+			}
+		}
 		if (isSwimming() && tickTime % 60 == 0) {
 			if (stamina > 0) {
 				stamina--;
@@ -100,6 +111,7 @@ public class Player extends Mob {
 		}
 
 		if (input.attack.clicked) {
+			if(flying)return;
 			if (stamina == 0) {
 
 			} else {
@@ -109,6 +121,7 @@ public class Player extends Mob {
 			}
 		}
 		if (input.menu.clicked) {
+			if(flying)return;
 			if (!use()) {
 				game.setMenu(new InventoryMenu(this));
 			}
@@ -213,6 +226,7 @@ public class Player extends Mob {
 	}
 
 	private boolean interact(int x0, int y0, int x1, int y1) {
+		if(flying)return false;
 		List<Entity> entities = level.getEntities(x0, y0, x1, y1);
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
@@ -243,7 +257,52 @@ public class Player extends Mob {
 
 		int flip1 = (walkDist >> 3) & 1;
 		int flip2 = (walkDist >> 3) & 1;
-
+		
+		if(flying){  //mc
+			int col = Color.get(-1, 100, 220, 555);
+			int xo = x - 8;
+			int yo = y - 11;
+			xt = 8;
+			yt = 16;
+			if (tickTime / 8 % 2 == 0) {
+				yt = 18;
+			}
+			if (dir == 0) {
+				xt = 12;
+			}
+			if (dir == 1) {
+				xt = 8;
+			}
+			if (dir == 2) {
+				xt = 20;
+			}
+			if (dir == 3) {
+				xt = 16;
+			}
+			flip1 = 0;
+			flip2 = 0;
+			screen.render(xo + 8 * flip1, yo + 0, xt + yt * 32, col, flip1);
+			screen.render(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col, flip1);
+			screen.render(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
+			screen.render(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
+			//render shadow
+			 col = Color.get(-1, 000, 000, 000);
+			 xo = x + 2;
+			 yo = y + 4;
+			 xt+=2;
+			 screen.render(xo + 8 * flip1, yo + 0, xt + yt * 32, col, flip1);
+				screen.render(xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt * 32, col, flip1);
+				screen.render(xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
+				screen.render(xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
+			
+			if (tickTime / 8 % 8 == 0) {
+			//if (tickTime / 8 % 2 == 0) {
+				//Sound.playerFly.play();
+			}
+			return;
+		}
+			
+		
 		if (dir == 1) {
 			xt += 2;
 		}
@@ -255,7 +314,10 @@ public class Player extends Mob {
 			}
 			xt += 4 + ((walkDist >> 3) & 1) * 2;
 		}
-
+		
+		//System.out.print("Flip1 "+flip1);
+		//System.out.print("Flip2 "+flip2);
+		
 		int xo = x - 8;
 		int yo = y - 11;
 		if (isSwimming()) {
@@ -322,6 +384,7 @@ public class Player extends Mob {
 	}
 
 	public void touchItem(ItemEntity itemEntity) {
+		if(flying)return;
 		itemEntity.take(this);
 		inventory.add(itemEntity.item);
 	}
@@ -369,12 +432,14 @@ public class Player extends Mob {
 	}
 
 	protected void touchedBy(Entity entity) {
+		if(flying)return;
 		if (!(entity instanceof Player)) {
 			entity.touchedBy(this);
 		}
 	}
 
 	protected void doHurt(int damage, int attackDir) {
+		if(flying)return;
 		if (hurtTime > 0 || invulnerableTime > 0) return;
 
 		Sound.playerHurt.play();

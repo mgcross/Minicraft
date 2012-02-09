@@ -28,5 +28,8 @@ public class AboutMenu extends Menu {
 		Font.draw("december 2011.", screen, 0 * 8 + 4, 7 * 8, Color.get(0, 333, 333, 333));
 		Font.draw("it is dedicated to", screen, 0 * 8 + 4, 9 * 8, Color.get(0, 333, 333, 333));
 		Font.draw("my father. <3", screen, 0 * 8 + 4, 10 * 8, Color.get(0, 333, 333, 333));
+		Font.draw("(Fly mode added", screen, 0 * 8 + 4, 12 * 8, Color.get(0, 333, 333, 333));
+		Font.draw("without consent by", screen, 0 * 8 + 4, 13 * 8, Color.get(0, 333, 333, 333));
+		Font.draw("mgcross@gmail.com)", screen, 0 * 8 + 4, 14 * 8, Color.get(0, 333, 333, 333));
 	}
 }
