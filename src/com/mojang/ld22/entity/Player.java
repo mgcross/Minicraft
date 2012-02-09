@@ -90,13 +90,8 @@ public class Player extends Mob {
 		if (input.left.down) xa--;
 		if (input.right.down) xa++;
 		if(input.fly.clicked) {
-			if(flying){
-				flying = !flying;
-				Sound.playerFly.stop();
-			} else {
-				flying = !flying;
-				Sound.playerFly.loop();
-			}
+			flying = !flying;
+			Sound.playerFly.play();
 		}
 		if (isSwimming() && tickTime % 60 == 0) {
 			if (stamina > 0) {
@@ -315,8 +310,6 @@ public class Player extends Mob {
 			xt += 4 + ((walkDist >> 3) & 1) * 2;
 		}
 		
-		//System.out.print("Flip1 "+flip1);
-		//System.out.print("Flip2 "+flip2);
 		
 		int xo = x - 8;
 		int yo = y - 11;
