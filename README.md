@@ -1,3 +1,6 @@
+# Minicraft Fly mod
+Added a 'fly' no-clip style modifier (F key) with a new sprite icons.png and sound file. 
+
 # Minicraft
 ## By Notch (http://notch.tumblr.com/)
 
